@@ -14,12 +14,6 @@ headers = {
 def fetch_html(url):
     """
     주어진 URL에서 HTML 콘텐츠를 가져옵니다.
-    
-    Args:
-        url (str): 가져올 웹 페이지의 URL
-        
-    Returns:
-        str: 성공시 HTML 콘텐츠, 실패시 None
     """
     try:
         # URL 유효성 검사
