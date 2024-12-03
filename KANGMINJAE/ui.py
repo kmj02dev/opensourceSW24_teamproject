@@ -5,17 +5,11 @@ import time
 import main
 
 class SentimentAnalysisGUI:
-    """
-    감정 분석 프로세스를 시각화하는 GUI 애플리케이션
-    각 단계의 진행 상황과 결과를 실시간으로 보여줍니다.
-    """
     def __init__(self):
-        # 메인 윈도우 설정
         self.root = tk.Tk()
         self.root.title("뉴스 기사 감정 분석")
-        self.root.geometry("800x600")
+        self.root.geometry("800x700")  # 창 크기를 더 크게 조정
         
-        # 스타일 설정
         self.style = ttk.Style()
         self.style.configure('Step.TFrame', padding=10)
         self.style.configure('Status.TLabel', padding=5)
@@ -23,7 +17,6 @@ class SentimentAnalysisGUI:
         self.setup_ui()
         
     def setup_ui(self):
-        """UI 컴포넌트 초기화 및 배치"""
         # 메인 컨테이너
         main_frame = ttk.Frame(self.root, padding="20")
         main_frame.pack(fill=tk.BOTH, expand=True)
@@ -35,7 +28,7 @@ class SentimentAnalysisGUI:
         ttk.Label(url_frame, text="뉴스 URL:").pack(side=tk.LEFT)
         self.url_entry = ttk.Entry(url_frame)
         self.url_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
-        self.url_entry.insert(0, "https://n.news.naver.com/mnews/article/057/0001857665")
+        self.url_entry.insert(0, "")
         
         self.analyze_btn = ttk.Button(url_frame, text="분석 시작", command=self.start_analysis)
         self.analyze_btn.pack(side=tk.LEFT)
@@ -44,7 +37,6 @@ class SentimentAnalysisGUI:
         self.steps_frame = ttk.Frame(main_frame)
         self.steps_frame.pack(fill=tk.X, pady=10)
         
-        # 단계별 상태 레이블 생성
         self.status_labels = []
         steps = [
             "1. URL 검증",
@@ -61,25 +53,39 @@ class SentimentAnalysisGUI:
             status_label.pack(side=tk.LEFT)
             self.status_labels.append(status_label)
         
-        # 결과 표시 영역
-        result_frame = ttk.LabelFrame(main_frame, text="분석 결과", padding=10)
-        result_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+        # 결과 표시를 위한 노트북 (탭) 생성
+        notebook = ttk.Notebook(main_frame)
+        notebook.pack(fill=tk.BOTH, expand=True, pady=10)
         
-        self.result_text = scrolledtext.ScrolledText(result_frame, height=10)
+        # 분석 결과 탭
+        result_frame = ttk.Frame(notebook)
+        notebook.add(result_frame, text="감정 분석 결과")
+        
+        self.result_text = scrolledtext.ScrolledText(result_frame, height=15, wrap=tk.WORD)
         self.result_text.pack(fill=tk.BOTH, expand=True)
+
+        # 본문 표시 탭
+        content_frame = ttk.Frame(notebook)
+        notebook.add(content_frame, text="추출된 본문")
         
+        self.content_text = scrolledtext.ScrolledText(content_frame, height=15, wrap=tk.WORD)
+        self.content_text.pack(fill=tk.BOTH, expand=True)
+    
     def update_status(self, step: int, status: str):
-        """단계별 상태 업데이트"""
         symbols = {"waiting": "○", "processing": "◎", "complete": "●", "error": "×"}
         self.status_labels[step].configure(text=f"{symbols[status]} {self.status_labels[step].cget('text')[2:]}")
-        
+    
     def log_result(self, message: str):
-        """결과 창에 메시지 추가"""
         self.result_text.insert(tk.END, message + "\n")
         self.result_text.see(tk.END)
-        
+    
+    def display_content(self, content: str):
+        """추출된 본문을 표시하는 새로운 메서드"""
+        self.content_text.delete(1.0, tk.END)
+        self.content_text.insert(tk.END, content)
+        self.content_text.see(tk.END)
+    
     def simulate_analysis(self):
-        """분석 프로세스 시뮬레이션"""
         try:
             # URL 검증
             self.update_status(0, "processing")
@@ -95,7 +101,6 @@ class SentimentAnalysisGUI:
             html_content = main.get_html(url)
             if html_content is None:
                 raise ValueError("HTML 파싱 실패")
-            time.sleep(1)
             self.update_status(1, "complete")
             self.log_result("HTML 파싱 완료")
             
@@ -104,15 +109,16 @@ class SentimentAnalysisGUI:
             main_content = main.extract_content(html_content)
             if main_content is None:
                 raise ValueError("본문 추출 실패")
-            time.sleep(1.5)
             self.update_status(2, "complete")
             self.log_result("본문 추출 완료")
+            
+            # 추출된 본문 표시
+            self.display_content(main_content)
             
             # 감정 분석
             self.update_status(3, "processing")
             sentiment_pipeline = main.analyze_sentiment(main_content)
             result = sentiment_pipeline
-            time.sleep(1)
             self.update_status(3, "complete")
             
             # 최종 결과 표시
@@ -130,24 +136,20 @@ class SentimentAnalysisGUI:
         
         finally:
             self.analyze_btn.configure(state='normal')
-            
+    
     def start_analysis(self):
-        """분석 프로세스 시작"""
-        # UI 초기화
         self.analyze_btn.configure(state='disabled')
         self.result_text.delete(1.0, tk.END)
+        self.content_text.delete(1.0, tk.END)
         for i in range(4):
             self.update_status(i, "waiting")
         
-        # 별도 스레드에서 분석 실행
         thread = threading.Thread(target=self.simulate_analysis)
         thread.daemon = True
         thread.start()
-        
+    
     def run(self):
-        """애플리케이션 실행"""
         self.root.mainloop()
 
-if __name__ == "__main__":
-    app = SentimentAnalysisGUI()
-    app.run()
+app = SentimentAnalysisGUI()
+app.run()
