@@ -1,6 +1,7 @@
 from transformers import pipeline
 import fetcher
 import filewriter
+import llm
 
 # 테스트할 URL 입력받기
 url = input("Enter URL: ")
