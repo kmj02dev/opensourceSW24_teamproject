@@ -15,7 +15,7 @@ def get_answer(text:str, model=models["Sonnet"]):
     try:
         message = client.messages.create(
             model=model,
-            max_tokens=4096,
+            max_tokens=250,
             temperature=0,
             system="You are an expert at extracting and analyzing the main content from HTML documents. Please extract the main body text while removing any navigation, headers, footers, advertisements, and other non-content elements.",
             messages=[
