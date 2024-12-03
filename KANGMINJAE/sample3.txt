@@ -1,0 +1,23 @@
+Here's a concise English translation of the key points from the article, keeping it under 512 words:
+
+[AI Leaders] Professor Chang-sun Lee: "Manufacturing Veterans Should Be Able to Create AI Models"
+
+Industry-specific AI is gaining attention recently, as AI models based on data from specific industrial sectors are delivering tangible benefits like cost reduction and process efficiency improvements. This approach differs significantly from general-purpose AI models that serve regular users.
+
+Professor Lee Chang-sun of Inha University emphasizes that industry experts should be able to build AI models themselves. He argues that AI implementation in manufacturing environments depends more on understanding industry-specific data than on the models or technology themselves.
+
+To make this possible, Professor Lee developed the concept of 'AI Chef' - making it easy for industry experts to create AI models. He also developed a model generation AI called 'MG AI' that allows anyone to easily create AI models.
+
+The process works like this:
+1. Manufacturing data is input into Excel
+2. The data passes through a pre-built AI engine
+3. An AI model customized for that specific environment is created
+4. The AI Chef (domain expert) reviews the model to ensure industry characteristics are properly reflected
+5. If modifications are needed, the expert can adjust data values in Excel to refine the final AI model
+
+Regarding hallucination concerns in manufacturing AI, Lee explains that manufacturing AI differs from general AI because it must understand cause-and-effect relationships, not just correlations. Manufacturing domain experts can help minimize AI hallucinations by utilizing their specialized knowledge of causal relationships.
+
+Real-world applications include:
+- Korea Clad Tech developed a model to predict surface and physical property defects
+- Seah Changwon Special Steel built a model to predict wire breakage rates based on material manufacturing and drawing conditions
+- Currently developing quality prediction models for Hyun

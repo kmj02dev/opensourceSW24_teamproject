@@ -15,9 +15,9 @@ def get_answer(text:str, model=models["Sonnet"]):
     try:
         message = client.messages.create(
             model=model,
-            max_tokens=250,
+            max_tokens=400,
             temperature=0,
-            system="You are an expert at extracting and analyzing the main content from HTML documents. Please extract the main body text while removing any navigation, headers, footers, advertisements, and other non-content elements.",
+            system="You are an expert at extracting and analyzing the main content from HTML documents. Your task is to extract the main body text while removing any navigation elements, headers, footers, advertisements, and other non-content elements. Once you have extracted the clean content, please translate the article into English, ensuring the translation does not exceed 512 words.",
             messages=[
                 {"role": "user", 
                 "content": text}

@@ -11,10 +11,10 @@ def get_html(url:str):
 
 def extract_content(html_content:str):
     # LLM을 이용해 본문 추출하기
+    # main_content = filemanager.read_file("./KANGMINJAE/sample3.txt") # 비용 절감을 위해 테스트 시 테스트 파일 이용
     main_content = llm.get_answer(html_content)
-    # main_content = filemanager.read_file("./KANGMINJAE/sample.txt") # 비용 절감을 위해 테스트 시 테스트 파일 이용
     assert main_content != None, 'bad answer'
-    # filemanager.write_string_to_file(main_content, "./KANGMINJAE/sample2.txt") # 분석을 위한 임시적 파일 작성
+    # filemanager.write_string_to_file(main_content, "./KANGMINJAE/sample3.txt") # 분석을 위한 임시적 파일 작성
     print(main_content)
     return main_content
 
