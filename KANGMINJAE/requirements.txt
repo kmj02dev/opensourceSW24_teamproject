@@ -1,0 +1,5 @@
+anthropic==0.7.0
+transformers==4.36.2
+tkinter    # Built into Python
+requests==2.31.0
+beautifulsoup4==4.12.3
